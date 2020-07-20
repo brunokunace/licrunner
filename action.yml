@@ -1,4 +1,4 @@
-name: Build and Deploy # chore
+name: Build and Deploy # chore2
 on: 
   push:
     branches:
