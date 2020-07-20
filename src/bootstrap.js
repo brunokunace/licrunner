@@ -1,7 +1,8 @@
 import app from './app'
 import { createBg, updateBG } from './background'
+import { createPlayer, playerSheet, player } from './player'
 let bgs = []
-var bgSpeed = 0.2
+var bgSpeed = 0
 
 const gameLoop = (delta) => {
   updateBG(bgs, bgSpeed)
@@ -12,13 +13,14 @@ const init = () => {
     const current = `bg${i}`
     bgs.push(createBg(app.loader.resources[current].texture))
   }
+  createPlayer(app)
   document.addEventListener('keydown', keyboard)
   app.ticker.add(gameLoop)
 }
 
 const keyboard = (e) => {
   const handler = {
-    get(target, property, receiver) {
+    get(target, property) {
     if (property in target) {
         return target[property];
       }
@@ -28,12 +30,23 @@ const keyboard = (e) => {
   const keys = {
     37: () => {
       bgSpeed += 0.1
+      if (!player.playing) {
+        player.textures = playerSheet.walkleft
+        // player.loop = true
+        player.play()
+      }
     },
     38: () => {
       bgSpeed = 0
+      player.stop()
     },
     39: () => {
       bgSpeed -= 0.1
+      if (!player.playing) {
+        player.textures = playerSheet.walkright
+        // player.loop = true
+        player.play()
+      }
     }
   }
 
